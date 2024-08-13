@@ -1,0 +1,9 @@
+Koriste se kada nije lako zakljuciti model
+
+1. Simulacija jedne partije pri fiksnoj politici - obezbediti da se stanje izabere nasumicno
+2. Simulirati nastavak partije koristeci fiksnu politiku dok se partija ne zavrsi
+3. Na kraju partije se pamti sekvenca svih stanja
+4. Racuna se dobit g
+5. Racuna se Q za datu politiku
+
+Inkrementalni Monte Karlo

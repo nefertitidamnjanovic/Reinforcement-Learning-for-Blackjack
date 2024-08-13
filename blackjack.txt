@@ -1,0 +1,65 @@
+1. Inijalizacija broja igraca, definisanje spila karata
+2. Dealer deli karte jednu kartu svakom igracu i sebi, face up
+3. Igraci igraju svoje sekvence jedan za drugim 
+4. Kada svi odigraju sekvence (akcije), ako nisu svi busted, dealer igra 
+
+Dealer je deo okruzenja.
+Dealer je agent sa fiksnom (predefinisanom) politikom:
+    - zbir dealera < 17 -> dealer igra hit
+    - zbir dealera >= 17 -> dealer igra hold
+
+Okruzenje kao parametre prima:
+    - tekuce stanje
+    - akciju
+Vraca:
+    - sledece stanje
+    - nagradu
+
+Skup akcija - hit - vuce se jedna karta
+            - hold - ne moze nikada vise da se primeni akcija hit
+            - split (radi pojednostavljenja izbaceno)
+
+Cilj je da se sekvencom akcija maksimizuje zbir karata
+Ogranicenje je da zbir mora biti <= 21, u suprotnom igrac je prepunjen (busted) - gubi
+
+Tipovi karata:
+    - male karte - vrednosti 2-10
+    - karte sa licima(slikama) - jack, queen, king - vrednosti 10
+    - kec - vrednosti 1 ili 11 (bira se sta vise odgovara sekvenci)
+        6 -> A -> K = 17
+        A -> A = 12 ili 2 ili 22(nema smisla bustovati)
+
+MDP je stohasticki - novo stanje zavisi sta se dobije iz spila - svaka karta se dobija sa nekom verovatnocom.
+
+Spil ima 52 karte, verovatnoce dobijanja karata su:
+    - male karte - 4/52
+    - lice karte - 12/52
+    - kec - 4/52
+        
+Na pocetku je uvek pametno vuci kartu (hit) jer zbir ne moze preci 21
+
+Nagrade se dobijaju na osnovu ishoda partije - na kraju partije, ne za svaku akciju:
+    - pobeda - +1 (dealer busted ili igrac > dealer)
+    - nereseno - 0 (dealer == igrac)
+    - poraz - -1 (igrac busted ili dealer > igrac)
+
+Kraj sledi nakon hold ackije ili busted igraca - kada igra jedan igrac.
+
+Nagrade za akcije koje ne dovode u terminalno stanje su 0.
+
+Skup stanja sadrzi moguce zbirove, svako stanje se sastoji od:
+    - trenutnog zbira
+    - da li imamo keca
+    - dilerova karta
+
+Potrebno je trenirati agenta da sam igra protiv dealera, bez drugih igraca.
+
+Sa spilom od 52 karte dolazi do velikih promena verovatnoca kada se izvuce par karata.
+Radi implementacije iz spila se nikada ne izbracuje karta, samo se definisu verovatnoce pojavljivanja svake karte i one ostaju fiksne u toku svih partija.
+Odnosno, agent ne broji vec izvucene karte - pojedonstavljenje.
+
+Alternativno, spil moze biti umnozak broja 52, tada bi se menjale verovatnoce izvlacenja karata kada se neka izvuce.
+Kada se potrosi svih 52 karte ubacuje se novih 52 sa istim pocetnim verovatnocama.
+
+Prvi algoritam koji zapravo uci - Monte Karlo metode.
+
